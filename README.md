@@ -101,6 +101,12 @@ All tests should be written in the `tests` folder. tests/test_src.py is a sample
 
 List the team behind this project. Their names linked to their Github, LinkedIn, or Twitter accounts should siffice. Ok to signify the role they play in the project, including the TTL and mentor
 
+## Team References
+The following resources are used by the team for references.
+1. [Making conventional commits](https://www.conventionalcommits.org/en/v1.0.0-beta.4/)
+2. [Project guidelines](https://docs.google.com/presentation/d/1hvnwv76gX98nAAgTxJp47CremzwPkfzDkXgejQGz2l0/edit#slide=id.g846e54039b_0_80)
+
+
 ## Contributing
 If this project sounds interesting to you and you'd like to contribute, thank you!
 First, you can send a mail to buildforsdg@andela.com to indicate your interest, why you'd like to support and what forms of support you can bring to the table, but here are areas we think we'd need the most help in this project :
