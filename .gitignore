@@ -1,7 +1,7 @@
 # FILES
 **/**/.pyc
 .DS_Store
-
+config.sh
 # DIRECTORIES
 **/**/__pycache__
 .vscode/

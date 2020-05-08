@@ -1,2 +1,6 @@
+from . import create_app
 def run():
-    pass
+    print("Hey")
+    app = create_app()
+    app.run(port="8084")
+
