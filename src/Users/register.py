@@ -12,6 +12,7 @@ def reg_lender():
     METHODS: POST
     """
     user_data = request.get_json()
+    print(user_data)
     check_user_data(user_data)
     try:
         lender = Lender()
@@ -58,10 +59,8 @@ def check_user_data(user_info):
     Returns:
         Throws and aborts if user is present or None if not not present
     """
-    email_result = None
-    phone_result = None
     if user_info is None:
-        abort(Response("Body cannnot be empty"), 400)
+        abort(Response("Body cannnot be empty",400))
     try:
         email = user_info["email"]
         email_result = User.query.filter_by(email=email).first()
