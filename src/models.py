@@ -4,6 +4,7 @@ from src import db
 
 class User(db.Model):
     """User Model."""
+
     __tablename__ = "client"  # user is reserved word in Postgres
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False, unique=True)
@@ -30,6 +31,7 @@ class User(db.Model):
 
 class Lender(db.Model):
     """Lender model."""
+    
     id = db.Column(db.Integer, primary_key=True)
     amount = db.Column(db.Integer, nullable=False, default=0)
     limit = db.Column(db.Integer, default=0)
@@ -37,6 +39,7 @@ class Lender(db.Model):
 
 class Borrower(db.Model):
     """Borrower model."""
+
     id = db.Column(db.Integer, primary_key=True)
     amount = db.Column(db.Integer, nullable=False, default=0)
     limit = db.Column(db.Integer, nullable=False, default=0)
