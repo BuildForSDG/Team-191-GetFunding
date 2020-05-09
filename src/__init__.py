@@ -14,7 +14,7 @@ def create_app():
     app.config.from_object(os.environ['SDG_CONFIG'])
     with app.app_context():
         db.init_app(app)
-        from .register import register_bp
+        from .Users import register_bp
         app.register_blueprint(register_bp)
         db.create_all()
     return app

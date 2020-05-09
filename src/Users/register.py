@@ -1,6 +1,6 @@
 from flask import Blueprint, request, abort, Response
 from werkzeug.security import generate_password_hash
-from . import db
+from src.models import db
 from src.models import User, Borrower, Lender
 register_bp = Blueprint("reg_bp", __name__, url_prefix="/register")
 
