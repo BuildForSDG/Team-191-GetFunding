@@ -1,6 +1,4 @@
-""" src module.
-Every thing application is here
-"""
+""" src module."""
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import os
