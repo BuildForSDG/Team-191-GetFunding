@@ -29,4 +29,5 @@ def mock_db():
     db.session.add(user2)
     db.session.commit()
     yield db
+    db.session.remove()
     db.drop_all()
