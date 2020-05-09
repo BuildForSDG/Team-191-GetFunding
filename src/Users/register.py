@@ -8,7 +8,6 @@ register_bp = Blueprint("reg_bp", __name__, url_prefix="/register")
 @register_bp.route("/lender/", methods=["POST"])
 def reg_lender():
     """Lender registration endpoint.
-
     Handles lender registration and adds to db if successful
     METHODS: POST
     """
@@ -32,7 +31,6 @@ def reg_lender():
 @register_bp.route("/borrower/", methods=["POST"])
 def reg_borrower():
     """Borrower registration endpoint.
-
     Handles the borrower registration and adds to db if sucessful
     METHODS: POST
     """
@@ -54,7 +52,6 @@ def reg_borrower():
 
 def check_user_data(user_info):
     """Check if user in the database.
-    
     It generates errors if use in the db
     Args:
         user_info: user data in key:value pairs format
