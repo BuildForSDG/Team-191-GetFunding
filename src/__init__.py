@@ -1,12 +1,10 @@
-# Calls and initialiazes the extensions
+""" src module
+Every thing application is here
+"""
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import os
 db = SQLAlchemy()
-
-
-class Name:
-    pass
 
 
 def create_app():

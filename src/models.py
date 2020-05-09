@@ -3,9 +3,10 @@ from src import db
 
 
 class User(db.Model):
-    """
+    """User Model
     Creates table users to store all users -> lenders + borrowers
     """
+    __tablename__ = "client"  # user is reserved word in Postgres
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False, unique=True)
     email = db.Column(db.String(100), nullable=False, unique=True)
@@ -30,8 +31,8 @@ class User(db.Model):
 
 
 class Lender(db.Model):
-    """
-    Table to record Borrowers
+    """Lender model
+    Table to record Lenders
     """
     id = db.Column(db.Integer, primary_key=True)
     amount = db.Column(db.Integer, nullable=False, default=0)
@@ -39,8 +40,8 @@ class Lender(db.Model):
 
 
 class Borrower(db.Model):
-    """
-    Table to record Lenders
+    """Borrower model
+    Table to record Borrowers
     """
     id = db.Column(db.Integer, primary_key=True)
     amount = db.Column(db.Integer, nullable=False, default=0)
