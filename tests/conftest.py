@@ -4,7 +4,7 @@ from . import User, Lender, Borrower, create_app, db
 # create a test client for testing methods, requests and responses
 @pytest.fixture(scope="module")
 def test_client():
-    """test_client
+    """test_client.
     Create a flask_app instance to test with various scenarios
     """
     app = create_app()
@@ -17,7 +17,7 @@ def test_client():
 
 @pytest.fixture(scope="module")
 def mock_db():
-    """Mock db
+    """Mock db.
     Prefill the db with some entries and test with the entries
     """
     db.create_all()

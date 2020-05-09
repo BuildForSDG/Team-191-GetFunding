@@ -1,4 +1,4 @@
-""" src module
+""" src module.
 Every thing application is here
 """
 from flask import Flask

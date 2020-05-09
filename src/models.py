@@ -3,7 +3,7 @@ from src import db
 
 
 class User(db.Model):
-    """User Model
+    """User Model.
     Creates table users to store all users -> lenders + borrowers
     """
     __tablename__ = "client"  # user is reserved word in Postgres
@@ -31,7 +31,7 @@ class User(db.Model):
 
 
 class Lender(db.Model):
-    """Lender model
+    """Lender model.
     Table to record Lenders
     """
     id = db.Column(db.Integer, primary_key=True)
@@ -40,7 +40,7 @@ class Lender(db.Model):
 
 
 class Borrower(db.Model):
-    """Borrower model
+    """Borrower model.
     Table to record Borrowers
     """
     id = db.Column(db.Integer, primary_key=True)

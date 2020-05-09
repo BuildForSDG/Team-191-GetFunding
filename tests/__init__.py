@@ -1,4 +1,4 @@
-""" Test module
+""" Test module.
 Helps with TDD (daah)
 """
 from src.models import User, Lender, Borrower
