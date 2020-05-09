@@ -50,7 +50,7 @@ def test_duplicate_borrower_sent(test_client, mock_db):
     assert b"User in db" in response.data
 
 
-def test_malformed_data_sent(test_client):
+def test_malformed_data_sent(test_client,mock_db):
     """GIVEN a flask app.
     WHEN a user sends incomplete data
     THEN check if error is raised
@@ -58,3 +58,6 @@ def test_malformed_data_sent(test_client):
     response = test_client.post('/register/lender/', json={"name": "Wycliffe", "email": "sikoi@gmail.com", "password": "SaveTheWorld"})
     assert response.status_code == 400
     assert b"phone_number" in response.data
+    response = test_client.post('/register/lender/', json={"email": "sdg@yahoo.com", "phone_number": "+254711111111", "password": "AmKing"})
+    assert response.status_code == 400
+    assert b"name" in response.data
