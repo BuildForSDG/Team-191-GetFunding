@@ -1,6 +1,8 @@
 from . import create_app
 
+app = create_app()
+
 
 def run():
-    app = create_app()
+    global app
     app.run(port="8084")
