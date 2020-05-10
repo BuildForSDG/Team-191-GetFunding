@@ -25,7 +25,11 @@ def test_add_lender(test_client, mock_db):
     WHEN a user tries to register again
     THEN check if error is raised
     """
-    response = test_client.post('/register/lender/', json={"name": "Eric", "email": "macha@gmail.com", "phone_number": "0704900126", "password": "qwerty"})
+    response = test_client.post('/register/lender/',
+                                json={"name": "Eric",
+                                      "email": "macha@gmail.com",
+                                      "phone_number": "0704900126",
+                                      "password": "qwerty"})
     assert response.status_code == 200
     assert b"Lender has been added" in response.data
 
@@ -35,7 +39,11 @@ def test_duplicate_lender_sent(test_client, mock_db):
     WHEN a user tries to register again
     THEN check if error is raised
     """
-    response = test_client.post('/register/lender/', json={"name": "Wycliffe", "email": "sikoi@gmail.com", "phone_number": "0703680126", "password": "SaveTheWorld"})
+    response = test_client.post('/register/lender/',
+                                json={"name": "Wycliffe",
+                                      "email": "sikoi@gmail.com",
+                                      "phone_number": "0703680126",
+                                      "password": "SaveTheWorld"})
     assert response.status_code == 409
     assert b"User in db" in response.data
 
@@ -45,19 +53,29 @@ def test_duplicate_borrower_sent(test_client, mock_db):
     WHEN a user tries to register again
     THEN check if error is raised
     """
-    response = test_client.post('/register/borrower/', json={"name": "Kefa", "email": "mutu@yahoo.com", "phone_number": "+254708456210", "password": "AmKing"})
+    response = test_client.post('/register/borrower/',
+                                json={"name": "Kefa",
+                                      "email": "mutu@yahoo.com",
+                                      "phone_number": "+254708456210",
+                                      "password": "AmKing"})
     assert response.status_code == 409
     assert b"User in db" in response.data
 
 
-def test_malformed_data_sent(test_client,mock_db):
+def test_malformed_data_sent(test_client, mock_db):
     """GIVEN a flask app.
     WHEN a user sends incomplete data
     THEN check if error is raised
     """
-    response = test_client.post('/register/lender/', json={"name": "Wycliffe", "email": "sikoi@gmail.com", "password": "SaveTheWorld"})
+    response = test_client.post('/register/lender/',
+                                json={"name": "Wycliffe",
+                                      "email": "sikoi@gmail.com",
+                                      "password": "SaveTheWorld"})
     assert response.status_code == 400
     assert b"phone_number" in response.data
-    response = test_client.post('/register/lender/', json={"email": "sdg@yahoo.com", "phone_number": "+254711111111", "password": "AmKing"})
+    response = test_client.post('/register/lender/',
+                                json={"email": "sdg@yahoo.com",
+                                      "phone_number": "+254711111111",
+                                      "password": "AmKing"})
     assert response.status_code == 400
     assert b"name" in response.data

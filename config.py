@@ -1,25 +1,39 @@
+import random
 import os
+import string
+
+if os.path.exists("mysecret.txt"):
+    f = open('mysecret.txt')
+    random_string = f.readline()
+else:
+    char_set = string.ascii_uppercase + string.digits
+    random_string = ''.join(random.sample(char_set*100, 100))
+    with open('mysecret.txt', 'a') as the_file:
+        the_file.write(random_string)
 
 
-class Config(object):
+class Config():
     DEBUG = False
     TESTING = False
-    SQLALCHEMY_DATABASE_URI = os.environ["DATABASE_URL"]
+    SECRET_KEY = random_string
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 class ProductionConfig(Config):
-    ENV = "production"
-    SECRET_KEY = os.environ["SECRET"]
-    SQLALCHEMY_DATABASE_URI = os.environ["DATABASE_URL"]
+    DB_NAME = 'ProductionCreditScore'
+    SQLALCHEMY_DATABASE_URI = ('''postgresql+psycopg2://cycks:Actuarial2012@
+                                    localhost/production''')
 
 
 class DevelopmentConfig(Config):
-    ENV = "development"
     DEBUG = True
-    TESTING = True
-    SECRET_KEY = os.environ["SECRET"]
-    SQLALCHEMY_DATABASE_URI = os.environ["DATABASE_URL"]
+    DB_NAME = 'DevelopmentCreditScore'
+    SQLALCHEMY_DATABASE_URI = ('''postgresql+psycopg2://cycks:Actuarial2012@
+                                    localhost/development''')
 
 
 class TestingConfig(Config):
     TESTING = True
+    DB_NAME = 'TestingCreditScore'
+    SQLALCHEMY_DATABASE_URI = ('''postgresql+psycopg2://cycks:Actuarial2012@
+                                    localhost/testing''')

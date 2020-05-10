@@ -12,10 +12,13 @@ class User(db.Model):
     phone_number = db.Column(db.String(15), nullable=False, unique=True)
     password = db.Column(db.String(100), nullable=False)
     join_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    lender_id = db.Column(db.Integer, db.ForeignKey('lender.id'), nullable=True)
+    lender_id = db.Column(db.Integer, db.ForeignKey('lender.id'),
+                          nullable=True)
     lender = db.relationship('Lender', backref=db.backref("user", lazy=True))
-    borrower_id = db.Column(db.Integer, db.ForeignKey('borrower.id'), nullable=True)
-    borrower = db.relationship('Borrower', backref=db.backref("user", lazy=True))
+    borrower_id = db.Column(db.Integer, db.ForeignKey('borrower.id'),
+                            nullable=True)
+    borrower = db.relationship('Borrower', backref=db.backref("user",
+                                                              lazy=True))
 
     @property
     def serialize(self):
@@ -31,7 +34,7 @@ class User(db.Model):
 
 class Lender(db.Model):
     """Lender model."""
-    
+
     id = db.Column(db.Integer, primary_key=True)
     amount = db.Column(db.Integer, nullable=False, default=0)
     limit = db.Column(db.Integer, default=0)
@@ -44,5 +47,8 @@ class Borrower(db.Model):
     amount = db.Column(db.Integer, nullable=False, default=0)
     limit = db.Column(db.Integer, nullable=False, default=0)
     score = db.Column(db.Integer, nullable=False, default=0)
-    lender_id = db.Column(db.Integer, db.ForeignKey('lender.id'), nullable=True)
-    lender = db.relationship('Lender', backref=db.backref("borrower", lazy=True))
+    lender_id = db.Column(db.Integer, db.ForeignKey('lender.id'),
+                          nullable=True)
+    lender = db.relationship('Lender', backref=db.backref("borrower",
+                                                          lazy=True)
+                             )

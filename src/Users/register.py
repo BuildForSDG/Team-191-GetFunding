@@ -20,7 +20,9 @@ def reg_lender():
         email = user_data["email"]
         password = user_data["password"]
         phone_number = user_data["phone_number"]
-        user = User(name=name, email=email, password=generate_password_hash(password=password), phone_number=phone_number, lender=lender)
+        user = User(name=name, email=email,
+                    password=generate_password_hash(password=password),
+                    phone_number=phone_number, lender=lender)
         db.session.add(user)
         db.session.commit()
     except KeyError as key:
@@ -43,7 +45,9 @@ def reg_borrower():
         email = user_data["email"]
         password = user_data["password"]
         phone_number = user_data["phone_number"]
-        user = User(name=name, email=email, password=generate_password_hash(password=password), phone_number=phone_number, borrower=borrower)
+        user = User(name=name, email=email,
+                    password=generate_password_hash(password=password),
+                    phone_number=phone_number, borrower=borrower)
         db.session.add(user)
         db.session.commit()
     except KeyError as key:
@@ -60,7 +64,7 @@ def check_user_data(user_info):
         Throws and aborts if user is present or None if not not present
     """
     if user_info is None:
-        abort(Response("Body cannnot be empty",400))
+        abort(Response("Body cannnot be empty", 400))
     try:
         email = user_info["email"]
         email_result = User.query.filter_by(email=email).first()
