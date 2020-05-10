@@ -1,3 +1,4 @@
-"""User module.
+"""
+User module.
 This module handles user routes e.g. Registration, Login and Logout
 """
