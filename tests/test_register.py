@@ -1,93 +1,59 @@
-# test for request method
-def test_wrong_method(test_client):
-    """
-    GIVEN a flask app.
-    WHEN the '/register/*' requests are made with GET
-    THEN check if wrong method status code is sent -> 405
-    """
-
-    lender_response = test_client.get('/register/lender/')
-    borrower_response = test_client.get('/register/borrower/')
-    assert lender_response.status_code == 405
-    assert borrower_response.status_code == 405
+import unittest
+import src
 
 
-# test for when no body is sent
-def test_no_body_sent(test_client):
-    """
-    GIVEN a flask app.
-    WHEN no body is sent to '/register/*' url with POST
-    THEN check if '400' is sent.
-    """
+class RegisterBPTest(unittest.TestCase):
 
-    response = test_client.post('/register/lender/', json=None)
-    assert response.status_code == 400
+    def setUp(self):
+        self.app = src.create_app()
+        self.test_client = self.app.test_client()
+        self.ctx = self.app.app_context()
+        self.ctx.push()
+        src.db.create_all()
+        lender1 = src.models.Lender()
+        user1 = src.models.User(name="Wycliffe", email="sikoli@gmail.com",
+                 phone_number="0703680126", password="SaveTheWorld",
+                 lender=lender1)
+        borrower1 = src.models.Borrower()
+        user2 = src.models.User(name="Kefa", email="mutu@yahoo.com",
+                 phone_number="+254708456210",
+                 password="AmKing", borrower=borrower1)
+        src.db.session.add(user1)
+        src.db.session.add(user2)
+        src.db.session.commit()
 
+    def test_no_body_sent(self):
+        response = self.test_client.post('/register/lender/', json=None)
+        self.assertEqual(response.status_code, 400)
 
-def test_add_lender(test_client, mock_db):
-    """
-    GIVEN a flask app.
-    WHEN a user tries to register again
-    THEN check if error is raised.
-    """
+    def test_add_lender(self):
+        response = self.test_client.post('/register/lender/', json={"name": "Eric", "email": "macha@gmail.com", "phone_number": "0704900126", "password": "qwerty"})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, b"Lender has been added!")
 
-    response = test_client.post('/register/lender/',
-                                json={"name": "Eric",
-                                      "email": "macha@gmail.com",
-                                      "phone_number": "0704900126",
-                                      "password": "qwerty"})
-    assert response.status_code == 200
-    assert b"Lender has been added" in response.data
+    def test_duplicate_lender_sent(self):
+        response = self.test_client.post('/register/lender/',
+                            json={"name": "Wycliffe",
+                                    "email": "sikoi@gmail.com",
+                                    "phone_number": "0703680126",
+                                    "password": "SaveTheWorld"})
+        self.assertEqual(response.status_code, 409)
+        self.assertEqual(response.data, b"User in db")
 
+    def test_duplicate_borrower_sent(self):
+        response = self.test_client.post('/register/borrower/',
+                            json={"name": "Kefa",
+                                    "email": "mutu@yahoo.com",
+                                    "phone_number": "+254708456210",
+                                    "password": "AmKing"})
+        self.assertEqual(response.status_code, 409)
+        self.assertEqual(response.data, b"User in db")
 
-def test_duplicate_lender_sent(test_client, mock_db):
-    """
-    GIVEN a flask app.
-    WHEN a user tries to register again
-    THEN check if error is raised.
-    """
-
-    response = test_client.post('/register/lender/',
-                                json={"name": "Wycliffe",
-                                      "email": "sikoi@gmail.com",
-                                      "phone_number": "0703680126",
-                                      "password": "SaveTheWorld"})
-    assert response.status_code == 409
-    assert b"User in db" in response.data
-
-
-def test_duplicate_borrower_sent(test_client, mock_db):
-    """
-    GIVEN a flask app.
-    WHEN a user tries to register again
-    THEN check if error is raised.
-    """
-
-    response = test_client.post('/register/borrower/',
-                                json={"name": "Kefa",
-                                      "email": "mutu@yahoo.com",
-                                      "phone_number": "+254708456210",
-                                      "password": "AmKing"})
-    assert response.status_code == 409
-    assert b"User in db" in response.data
+    def tearDown(self):
+        src.db.session.remove()
+        src.db.drop_all()
+        self.ctx.pop()
 
 
-def test_malformed_data_sent(test_client, mock_db):
-    """
-    GIVEN a flask app.
-    WHEN a user sends incomplete data
-    THEN check if error is raised
-    """
-
-    response = test_client.post('/register/lender/',
-                                json={"name": "Wycliffe",
-                                      "email": "sikoi@gmail.com",
-                                      "password": "SaveTheWorld"})
-    assert response.status_code == 400
-    assert b"phone_number" in response.data
-    response = test_client.post('/register/lender/',
-                                json={"email": "sdg@yahoo.com",
-                                      "phone_number": "+254711111111",
-                                      "password": "AmKing"})
-    assert response.status_code == 400
-    assert b"name" in response.data
+if __name__ == "__main__":
+    unittest.main()

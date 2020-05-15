@@ -1,7 +1,6 @@
 from flask import Blueprint, request, abort, Response
 from werkzeug.security import generate_password_hash
-from src.models import db
-from src.models import User, Borrower, Lender
+import src
 register_bp = Blueprint("reg_bp", __name__, url_prefix="/register")
 
 
@@ -16,16 +15,16 @@ def reg_lender():
     print(user_data)
     check_user_data(user_data)
     try:
-        lender = Lender()
+        lender = src.models.Lender()
         name = user_data["name"]
         email = user_data["email"]
         password = user_data["password"]
         phone_number = user_data["phone_number"]
-        user = User(name=name, email=email,
+        user = src.models.User(name=name, email=email,
                     password=generate_password_hash(password=password),
                     phone_number=phone_number, lender=lender)
-        db.session.add(user)
-        db.session.commit()
+        src.db.session.add(user)
+        src.db.session.commit()
     except KeyError as key:
         return Response("Check "+str(key), 400)
     else:
@@ -42,16 +41,16 @@ def reg_borrower():
     user_data = request.get_json()
     check_user_data(user_data)
     try:
-        borrower = Borrower()
+        borrower = src.models.Borrower()
         name = user_data["name"]
         email = user_data["email"]
         password = user_data["password"]
         phone_number = user_data["phone_number"]
-        user = User(name=name, email=email,
+        user = src.models.User(name=name, email=email,
                     password=generate_password_hash(password=password),
                     phone_number=phone_number, borrower=borrower)
-        db.session.add(user)
-        db.session.commit()
+        src.db.session.add(user)
+        src.db.session.commit()
     except KeyError as key:
         return Response("Check "+str(key), 400)
     return Response("Borrower has been added!", 200)
@@ -70,9 +69,9 @@ def check_user_data(user_info):
         abort(Response("Body cannnot be empty", 400))
     try:
         email = user_info["email"]
-        email_result = User.query.filter_by(email=email).first()
+        email_result = src.models.User.query.filter_by(email=email).first()
         phone = user_info["phone_number"]
-        phone_result = User.query.filter_by(phone_number=phone).first()
+        phone_result = src.models.User.query.filter_by(phone_number=phone).first()
     except KeyError as key:
         abort(Response(str(key)+"is missing", 400))
     except Exception as err:
