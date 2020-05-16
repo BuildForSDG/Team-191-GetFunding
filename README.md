@@ -3,20 +3,19 @@ A one-liner phrase describing this project or app
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/7f29d2a989984a60879bd8199334ef86)](https://app.codacy.com/gh/BuildForSDG/Team-191-GetFunding?utm_source=github.com&utm_medium=referral&utm_content=BuildForSDG/Team-191-GetFunding&utm_campaign=Badge_Grade_Dashboard)
 [![Codacy Badge](https://img.shields.io/badge/Code%20Quality-D-red)](https://img.shields.io/badge/Code%20Quality-D-red)
 
-
 ## About
 
-What is this project about. Ok to enrich here or the section above it with an image. 
+What is this project about. Ok to enrich here or the section above it with an image.
 
 Once this repo has been setup on Codacy by the TTL, replace the above badge with the actual one from the Codacy dashboard, and add the code coverage badge as well. This is mandatory
 
 This is a simple python starter repo template for setting up your project. The setup contains:
 
-- install: poetry via pip. poetry is a dependecy manager.
+  - install: poetry via pip. poetry is a dependecy manager.
 
-- poetry: configuration in pyproject.toml
+  - poetry: configuration in pyproject.toml
 
-- flake8: for linting and formatting
+  - flake8: for linting and formatting
 
 ## Why
 
@@ -25,23 +24,22 @@ Talk about what problem this solves, what SDG(s) and SGD targets it addresses an
 ## Usage
 How would someone use what you have built, include URLs to the deployed app, service e.t.c when you have it setup
 
-
 ## Setup
-You should have **Python 3.5+** and **git** installed. 
+You should have **Python 3.5+** and **git** installed.
 
-1. Clone the repo you've created from the template herein and change into the directory
+ 1. Clone the repo you've created from the template herein and change into the directory
 
     ``
     git clone <Your Repository>
     ``
 
-2. Change into repo directory
+ 2. Change into repo directory
 
     ``
     cd python-starter
     ``
 
-3. Install poetry, a dependecy manager for python.
+ 3. Install poetry, a dependecy manager for python.
 
     On windows, you will need powershell to install it:
 
@@ -80,22 +78,21 @@ You should have **Python 3.5+** and **git** installed.
 
     This will install pytest for running tests and flake8, linter for your project.
 
-#### To Note
+### To Note
 `src/app.py` is the entry to the project and source code should go into the `src` folder.
 
 All tests should be written in the `tests` folder. tests/test_src.py is a sample test file that shows how tests should like. Feel free to delete it.
 
-#### Hints
+### Hints
 
-- Lint: `poetry run flake8`
-- Run tests using the command: `poetry run pytest`
-- Install dependencies: 
+  - Lint: `poetry run flake8`
+  - Run tests using the command: `poetry run pytest`
+  - Install dependencies:
   `poetry add <dependency>`
-- Install dev dependencies:
+  - Install dev dependencies:
   `poetry add --dev <dev-dependency>`
-- Run your project:
+  - Run your project:
   `poetry run app`
-
 
 ## Authors
 
@@ -105,7 +102,6 @@ List the team behind this project. Their names linked to their Github, LinkedIn,
 The following resources are used by the team for references.
 1. [Making conventional commits](https://www.conventionalcommits.org/en/v1.0.0-beta.4/)
 2. [Project guidelines](https://docs.google.com/presentation/d/1hvnwv76gX98nAAgTxJp47CremzwPkfzDkXgejQGz2l0/edit#slide=id.g846e54039b_0_80)
-
 
 ## Contributing
 If this project sounds interesting to you and you'd like to contribute, thank you!
