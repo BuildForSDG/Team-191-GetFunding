@@ -3,7 +3,7 @@ import src
 
 
 class User(src.db.Model):
-    
+
     """User Model."""
 
     __tablename__ = "client"  # user is reserved word in Postgres

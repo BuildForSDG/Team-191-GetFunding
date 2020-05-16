@@ -2,7 +2,7 @@ import src
 
 
 class Borrower(src.db.Model):
-    
+
     """Borrower model."""
 
     id = src.db.Column(src.db.Integer, primary_key=True)
