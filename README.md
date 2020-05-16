@@ -1,7 +1,7 @@
 A one-liner phrase describing this project or app
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/7f29d2a989984a60879bd8199334ef86)](https://app.codacy.com/gh/BuildForSDG/Team-191-GetFunding?utm_source=github.com&utm_medium=referral&utm_content=BuildForSDG/Team-191-GetFunding&utm_campaign=Badge_Grade_Dashboard)
-[![Codacy Badge](https://img.shields.io/badge/Code%20Quality-D-red)](https://img.shields.io/badge/Code%20Quality-D-red)
+
 
 ## About
 
