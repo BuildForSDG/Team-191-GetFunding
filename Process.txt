@@ -1,0 +1,36 @@
+How registration will flow:
+    1. Create two endpoints for lender and borrower registration.
+    2. Get the user details sent via json/form-data.
+    3. Check if the user is registered in the system.
+    4. If 3 is true -> send an error message back.
+    5. If 3 is false then:
+        a. Hash the password
+        b. Save the user in Users table and corresponding table i.e. either Lender or Borrower
+
+Models:
+    1. User model
+        ->Name
+        ->Email
+        ->PhoneNumber
+        ->Password
+        ->Date_joined
+        ->CategoryId (FK)
+    2. Borrower model
+        ->CategoryId
+        ->CreditScore
+        ->CreditLimit
+        ->CreditAmount
+        ->Lender(Lender's CategoryId)
+    3. Lender model
+        ->CategoryId
+        ->LendingLimit
+        ->LendingAmount
+
+User Data from frontend:
+    {
+        "name":<full name>,
+        "email":<email>,
+        "phonenumber":<phonenumber>,
+        "Password",<password>,
+        "national_id":<national_id/passport> (My suggestion of unique identifier of each user, what do you think?)
+    }
