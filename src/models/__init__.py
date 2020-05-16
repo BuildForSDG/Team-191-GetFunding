@@ -1,3 +1,4 @@
+"""Models module."""
 from .Lender import Lender
 from .User import User
 from .Borrower import Borrower

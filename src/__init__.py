@@ -18,3 +18,7 @@ def create_app():
         app.register_blueprint(register_bp)
         db.create_all()
     return app
+
+
+def print_modules():
+    print(dir(models))
