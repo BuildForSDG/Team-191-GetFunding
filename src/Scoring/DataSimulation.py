@@ -245,6 +245,11 @@ borrower_dataset = create_borrower_ids(borrower_dataset)
 
 
 def add_defaulters(df1, df2):
+    """
+    Add defaulters to the borrower data set.
+    Drop unwanted column in the final merged and merge the remaining columns
+    to borrower data set on the borrower id.
+    """
     to_merge = df1.drop(columns=["total_withdrawal", "total_transfer",
                                       "total_deposit", "total_airtime",
                                       "total_received", "total_out",
