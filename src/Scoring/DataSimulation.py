@@ -18,17 +18,17 @@ from functools import reduce
 warnings.filterwarnings('ignore')
 start_date = date(2020, 1, 1)
 end_date = date(2020, 4, 1)
-# check is used in the create_dataset function to generate date column
+# random_dates is used in the create_dataset function to generate date column
 random_dates = pd.date_range(start_date, end_date).to_list()
-trans_number = 100000
-number_of_borrowers = 20000
-number_of_loans = 20000
+trans_num = 100000
+num_of_borrowers = 20000
+num_of_loans = 20000
 
 
 def create_dataset(num=1):
     """
     Generate a synthetic dataset.
-    Given an integer of the number of rows expected in the data set
+    Given an integer of the num of rows expected in the data set
     Generate a trasaction date column, transaction details column, and
     the transaction status columns for the transaction dataset.
     """
@@ -49,7 +49,7 @@ def create_dataset(num=1):
     return output
 
 
-trans_dataset = pd.DataFrame(create_dataset(num=trans_number))
+trans_dataset = pd.DataFrame(create_dataset(num=trans_num))
 
 
 def create_trans_ids(df):
@@ -59,10 +59,9 @@ def create_trans_ids(df):
     every row and a borrower id which is not unique to every row.
     Add the ids to the data frame and return the data frame.
     """
-    df["transaction_id"] = list(range(1, trans_number + 1))
-    df["borrower_id"] = np.random.choice(list(range(1, number_of_borrowers )),
-                                         size=trans_number, replace=True)
-    return df
+    df["transaction_id"] = list(range(1, trans_num + 1))
+    df["borrower_id"] = list(range(1, num_of_borrowers + 1))*5
+    return df.sort_values(by="borrower_id")
 
 
 trans_dataset = create_trans_ids(trans_dataset)
@@ -73,7 +72,7 @@ def create_sub_dataset(df, containing, column_filter, myrange):
     Separate transactional data set into subsets.
     Given a dataframe, filter the dataframe for rows containing
     'containing', on column 'column_filter' and generate a list of
-    random numbers as the amount and add the amount as a column
+    random nums as the amount and add the amount as a column
     to the data frame. Add a column of charge as 3 percent of the
     amount and return a dataframe.
     """
@@ -89,7 +88,6 @@ def create_sub_dataset(df, containing, column_filter, myrange):
     return df
 
 
-
 def combine_trans_sets():
     withdrawals = create_sub_dataset(trans_dataset, "withdrawal",
                                      "trans_details", range(100, 5000))
@@ -101,8 +99,8 @@ def combine_trans_sets():
                                            "trans_details", range(100, 5000))
     funds_received = create_sub_dataset(trans_dataset, "funds_received",
                                         "trans_details", range(100, 35000))
-    combined_df =  withdrawals.append([customer_transfers, funds_received,
-                                       deposits, airtime_purchases])
+    combined_df = withdrawals.append([customer_transfers, funds_received,
+                                      deposits, airtime_purchases])
     return combined_df.sort_values(by=['borrower_id'])
 
 
@@ -117,14 +115,14 @@ def create_loan_dataset(num=1):
               {"repayment_period": np.random.choice([1, 2, 3],
                                                     p=[0.7, 0.2, 0.1]),
                "date_disbursed": np.random.choice(random_dates),
-               "loan_amount": random.randrange(100, 35000 , 5)
+               "loan_amount": random.randrange(100, 35000, 5)
                }
               for x in range(num)
              ]
     return output
 
 
-loan_dataset = pd.DataFrame(create_loan_dataset(num=number_of_loans))
+loan_dataset = pd.DataFrame(create_loan_dataset(num=num_of_loans))
 
 
 def add_loan_columns(df, num):
@@ -144,10 +142,12 @@ def add_loan_columns(df, num):
                                           df["date_disbursed"] +
                                           pd.offsets.MonthOffset(3)))
     df["loan_id"] = list(range(1, len(df["date_repaid"]) + 1))
-    df["borrower_id"] = np.random.choice(list(range(1, number_of_borrowers )),
+    df["borrower_id"] = np.random.choice(list(range(1, num_of_borrowers + 1)),
                                          size=num, replace=True)
     return df
 
+
+loan_dataset = add_loan_columns(loan_dataset, num_of_borrowers)
 
 
 def subset_datasets(df, filters):
@@ -160,9 +160,8 @@ def subset_datasets(df, filters):
     df = df.loc[df["trans_details"].str.contains(str(filters))]
     df = df.groupby(["borrower_id"], as_index=False).agg({'total_amount':
                                                           'sum'})
-    df=df.rename(columns = {"total_amount": "total_" + str(filters)})
+    df = df.rename(columns={"total_amount": "total_" + str(filters)})
     return df.sort_values(by=['borrower_id'])
-
 
 
 def sum_total_details(df):
@@ -188,16 +187,19 @@ def sum_total_details(df):
     return df_merged
 
 
+df_merged = sum_total_details(trans_dataset)
+
+
 def find_defaulters(df):
     """
     Find defaulters.
-    Add a column total_out which is the sum of withdrawal, transfer, and airtime.
-    Add a column total_in as the sum of recieved funds and deposits.
+    Add a column total_out which is the sum of withdrawal, transfer, and
+    airtime. Add a column total_in as the sum of recieved funds and deposits.
     Add a colum of differences as the total_in minus the total_out and set
     defaulter(1) as people who have more money goin out than coming in.
     """
-    df["total_out"] = (df["total_withdrawal"] + df["total_transfer"]
-                       + df["total_airtime"])
+    df["total_out"] = (df["total_withdrawal"] + df["total_transfer"] +
+                       df["total_airtime"])
     df["total_in"] = (df["total_deposit"] + df["total_received"])
     df["differences"] = df["total_in"] - df["total_out"]
     df["defaulters"] = np.where(df.differences > 0, 0, 1)
@@ -209,7 +211,7 @@ final_df = find_defaulters(df_merged)
 
 start_birth_date = date(1950, 1, 1)
 end_birth_date = date(2003, 4, 1)
-random_birth_dates =  pd.date_range(start_birth_date, end_birth_date).to_list()
+random_birth_dates = pd.date_range(start_birth_date, end_birth_date).to_list()
 
 
 def create_borrower_dataset(num=1):
@@ -222,14 +224,14 @@ def create_borrower_dataset(num=1):
     output = [
               {"birth_date": np.random.choice(random_dates),
                "borrower_gender": np.random.choice(["male", "female", "other"],
-                                                 p=[0.48, 0.48, 0.04])
+                                                   p=[0.48, 0.48, 0.04])
                }
               for x in range(num)
             ]
     return output
 
+borrower_dataset = pd.DataFrame(create_borrower_dataset(num_of_borrowers))
 
-borrower_dataset = pd.DataFrame(create_borrower_dataset(number_of_borrowers))
 
 def create_borrower_ids(df):
     """
@@ -238,7 +240,7 @@ def create_borrower_ids(df):
     Add the ids to the data frame and drop unwanted columns in the
     final_df and merge the two dataframes.
     """
-    df["borrower_id"] = list(range(1, number_of_borrowers + 1))
+    df["borrower_id"] = list(range(1, num_of_borrowers + 1))
     return df
 
 borrower_dataset = create_borrower_ids(borrower_dataset)
@@ -251,12 +253,31 @@ def add_defaulters(df1, df2):
     to borrower data set on the borrower id.
     """
     to_merge = df1.drop(columns=["total_withdrawal", "total_transfer",
-                                      "total_deposit", "total_airtime",
-                                      "total_received", "total_out",
-                                      "total_in", "differences"])
-    df = pd.merge(df2, to_merge, on = "borrower_id", how = "left")
+                                 "total_deposit", "total_airtime",
+                                 "total_received", "total_out",
+                                 "total_in", "differences"])
+    df = pd.merge(df2, to_merge, on="borrower_id", how="left")
+    df = df[df['defaulters'].notna()]
     df["defaulters"] = df["defaulters"].astype(int)
     return df
 
 
 borrower_dataset = add_defaulters(final_df, borrower_dataset)
+
+
+def save_datasets():
+    """
+    Save datasets.
+    check if a data set does not exist in the current working directory
+    and save it else do nothing.
+    """
+    if not os.path.isfile('loan_dataset.csv'):
+        loan_dataset.to_csv('loan_dataset.csv', header='column_names')
+    if not os.path.isfile('trans_dataset.csv'):
+        trans_dataset.to_csv('trans_dataset.csv', header='column_names')
+    if not os.path.isfile('borrower_dataset.csv'):
+        borrower_dataset.to_csv('borrower_dataset.csv', header='column_names')
+    return None
+
+
+save_datasets()
