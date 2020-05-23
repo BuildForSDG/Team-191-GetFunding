@@ -19,9 +19,9 @@ start_date = date(2020, 1, 1)
 end_date = date(2020, 4, 1)
 # random_dates is used in the create_dataset function to generate date column
 random_dates = pd.date_range(start_date, end_date).to_list()
-trans_num = 100000
-num_of_borrowers = 20000
-num_of_loans = 20000
+trans_num = 1000
+num_of_borrowers = 200
+num_of_loans = 200
 
 
 def create_dataset(num=1):
@@ -45,25 +45,14 @@ def create_dataset(num=1):
                }
               for x in range(num)
             ]
-    return output
-
-
-trans_dataset = pd.DataFrame(create_dataset(num=trans_num))
-
-
-def create_trans_ids(df):
-    """
-    Add transaction_id and borrower_id.
-    Given a data frame generate transaction id which is unique for
-    every row and a borrower id which is not unique to every row.
-    Add the ids to the data frame and return the data frame.
-    """
+    df = pd.DataFrame(output)
     df["transaction_id"] = list(range(1, trans_num + 1))
     df["borrower_id"] = list(range(1, num_of_borrowers + 1))*5
-    return df.sort_values(by="borrower_id")
+    return df
 
 
-trans_dataset = create_trans_ids(trans_dataset)
+trans_dataset = create_dataset(num=trans_num)
+
 
 
 def create_sub_dataset(df, containing, column_filter, myrange):
@@ -87,28 +76,28 @@ def create_sub_dataset(df, containing, column_filter, myrange):
     return df
 
 
-def combine_trans_sets():
-    withdrawals = create_sub_dataset(trans_dataset, "withdrawal",
+def combine_trans_sets(df):
+    withdrawals = create_sub_dataset(df, "withdrawal",
                                      "trans_details", range(100, 5000))
-    customer_transfers = create_sub_dataset(trans_dataset, "transfer",
-                                            "trans_details", range(100, 5000))
-    deposits = create_sub_dataset(trans_dataset, "deposit",
+    transfers = create_sub_dataset(df, "transfer",
+                                   "trans_details", range(100, 5000))
+    deposits = create_sub_dataset(df, "deposit",
                                   "trans_details", range(100, 30000))
-    airtime_purchases = create_sub_dataset(trans_dataset, "airtime",
-                                           "trans_details", range(100, 5000))
-    funds_received = create_sub_dataset(trans_dataset, "funds_received",
-                                        "trans_details", range(100, 35000))
-    combined_df = withdrawals.append([customer_transfers, funds_received,
-                                      deposits, airtime_purchases])
+    airtime = create_sub_dataset(df, "airtime",
+                                 "trans_details", range(100, 5000))
+    funds = create_sub_dataset(df, "funds_received",
+                               "trans_details", range(100, 35000))
+    combined_df = withdrawals.append([transfers, funds, deposits, airtime])
     return combined_df.sort_values(by=['borrower_id'])
 
 
-trans_dataset = combine_trans_sets()
+trans_dataset = combine_trans_sets(trans_dataset)
 
 
 def create_loan_dataset(num=1):
     """ Generate a loan data set.
     Generate a repayment period a date disbursed and a loan amount.
+    Then add columns of date_repaid, loan, and borrower ids.
     """
     output = [
               {"repayment_period": np.random.choice([1, 2, 3],
@@ -118,20 +107,7 @@ def create_loan_dataset(num=1):
                }
               for x in range(num)
              ]
-    return output
-
-
-loan_dataset = pd.DataFrame(create_loan_dataset(num=num_of_loans))
-
-
-def add_loan_columns(df, num):
-    """
-    Add date_repaid, loan_id, and borrower_id to loan data.
-    Generate additional columns for the loan dataset.
-    Given a dataframe generate a date repaid column as the
-    date_disbursed plus the repayment_period. Add a loan_id
-    of unique loans and a borrower id which is not unique.
-    """
+    df = pd.DataFrame(output)
     df["date_repaid"] = np.where(df.repayment_period == 1,
                                  df["date_disbursed"] +
                                  pd.offsets.MonthOffset(1),
@@ -146,7 +122,7 @@ def add_loan_columns(df, num):
     return df
 
 
-loan_dataset = add_loan_columns(loan_dataset, num_of_borrowers)
+loan_dataset = create_loan_dataset(num=num_of_loans)
 
 
 def subset_datasets(df, filters):
@@ -157,10 +133,10 @@ def subset_datasets(df, filters):
     transcation details.
     """
     df = df.loc[df["trans_details"].str.contains(str(filters))]
-    df = df.groupby(["borrower_id"], as_index=False).agg({'total_amount':
+    df1 = df.groupby(["borrower_id"], as_index=False).agg({'total_amount':
                                                           'sum'})
-    df = df.rename(columns={"total_amount": "total_" + str(filters)})
-    return df.sort_values(by=['borrower_id'])
+    df2 = df1.rename(columns={"total_amount": "total_" + str(filters)})
+    return df2.sort_values(by=['borrower_id'])
 
 
 def sum_total_details(df):
@@ -213,12 +189,14 @@ end_birth_date = date(2003, 4, 1)
 random_birth_dates = pd.date_range(start_birth_date, end_birth_date).to_list()
 
 
-def create_borrower_dataset(num=1):
+def create_borrower_dataset(df1, num=1):
     """
     Generate a synthetic dataset.
     Given an integer of the number of rows expected in the data set
     Generate a trasaction date column, transaction details column, and
     the transaction status columns for the transaction dataset.
+    Drop unwanted column in the final merged and merge the remaining columns
+    to borrower data set on the borrower id.
     """
     output = [
               {"birth_date": np.random.choice(random_dates),
@@ -227,41 +205,19 @@ def create_borrower_dataset(num=1):
                }
               for x in range(num)
             ]
-    return output
-
-borrower_dataset = pd.DataFrame(create_borrower_dataset(num_of_borrowers))
-
-
-def create_borrower_ids(df):
-    """
-    Add borrower_id.
-    Given a data frame and a borrower id which is unique to every row.
-    Add the ids to the data frame and drop unwanted columns in the
-    final_df and merge the two dataframes.
-    """
+    df =  pd.DataFrame(output)
     df["borrower_id"] = list(range(1, num_of_borrowers + 1))
-    return df
-
-borrower_dataset = create_borrower_ids(borrower_dataset)
-
-
-def add_defaulters(df1, df2):
-    """
-    Add defaulters to the borrower data set.
-    Drop unwanted column in the final merged and merge the remaining columns
-    to borrower data set on the borrower id.
-    """
     to_merge = df1.drop(columns=["total_withdrawal", "total_transfer",
                                  "total_deposit", "total_airtime",
                                  "total_received", "total_out",
                                  "total_in", "differences"])
-    df = pd.merge(df2, to_merge, on="borrower_id", how="left")
+    df = pd.merge(df, to_merge, on="borrower_id", how="left")
     df = df[df['defaulters'].notna()]
     df["defaulters"] = df["defaulters"].astype(int)
     return df
 
 
-borrower_dataset = add_defaulters(final_df, borrower_dataset)
+borrower_dataset = create_borrower_dataset(final_df, num_of_borrowers)
 
 
 def save_datasets():
@@ -279,4 +235,4 @@ def save_datasets():
     return None
 
 
-save_datasets()
+# save_datasets()
