@@ -9,11 +9,12 @@ authors = [
 [tool.poetry.dependencies]
 python = "^3.7"
 
-flask = "^1.1.2"
-flask_sqlalchemy = "^2.4.1"
+flask-sqlalchemy = "^2.4.1"
+numpy = "^1.18.4"
+faker = "^4.0.3"
+pyjanitor = "^0.20.5"
 psycopg2 = "^2.8.5"
 gunicorn = "^20.0.4"
-
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
