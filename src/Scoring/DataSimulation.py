@@ -132,11 +132,11 @@ def subset_datasets(df, filters):
     by borrower_id, and rename the total_amount to the total plus the
     transcation details.
     """
-    df = df.loc[df["trans_details"].str.contains(str(filters))]
-    df1 = df.groupby(["borrower_id"], as_index=False).agg({'total_amount':
+    df1 = df.loc[df["trans_details"].str.contains(str(filters))]
+    df2 = df1.groupby(["borrower_id"], as_index=False).agg({'total_amount':
                                                           'sum'})
-    df2 = df1.rename(columns={"total_amount": "total_" + str(filters)})
-    return df2.sort_values(by=['borrower_id'])
+    df3 = df2.rename(columns={"total_amount": "total_" + str(filters)})
+    return df3.sort_values(by=['borrower_id'])
 
 
 def sum_total_details(df):
