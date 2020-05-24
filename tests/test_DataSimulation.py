@@ -102,15 +102,15 @@ class TransactionalTestCase(unittest.TestCase):
         df = create_dataset(trans_num)
         df1 = create_sub_dataset(df, "withdrawal",
                                  "trans_details", range(100, 500))
-        self.assertTrue(is_datetime64_any_dtype(df.trans_date),
+        self.assertTrue(is_datetime64_any_dtype(df1.trans_date),
                         msg="The trans_date column must be of type datetime")
-        self.assertTrue(is_object_dtype(df.trans_details),
+        self.assertTrue(is_object_dtype(df1.trans_details),
                         msg="The trans_details column must be an object")
-        self.assertTrue(is_object_dtype(df.trans_status),
+        self.assertTrue(is_object_dtype(df1.trans_status),
                         msg="The is_string_dtype column must be an object")
-        self.assertTrue(is_numeric_dtype(df.transaction_id),
+        self.assertTrue(is_numeric_dtype(df1.transaction_id),
                         msg="The trans_details column must be an object")
-        self.assertTrue(is_numeric_dtype(df.borrower_id),
+        self.assertTrue(is_numeric_dtype(df1.borrower_id),
                         msg="The is_string_dtype column must be an object")
 
     def test_combine_trans_sets_columns(self):
