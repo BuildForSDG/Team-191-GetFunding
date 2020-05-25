@@ -9,7 +9,14 @@ from src import models
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object(os.environ['SDG_CONFIG'])
+    if app.config['ENV'] == "production":
+		app.config.from_object("config.ProductionConfig")
+	elif app.config['ENV'] == "demonstration":
+		app.config.from_object("config.Demo")
+	elif app.config['ENV'] == "development":
+		app.config.from_object("config.DevelopmentConfig")
+	else:
+		app.config.from_object("config.TestingConfig")
     with app.app_context():
         db.init_app(app)
         from src.Users import register_bp

@@ -6,7 +6,7 @@ from decouple import config
 
 
 
-class Config():
+class MainConfig():
     DEBUG = False
     TESTING = False
     SECRET_KEY = config('SECRET_KEY')
