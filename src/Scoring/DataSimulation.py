@@ -14,14 +14,14 @@ from datetime import date
 from functools import reduce
 
 
-warnings.filterwarnings('ignore')
 start_date = date(2020, 1, 1)
 end_date = date(2020, 4, 1)
 # random_dates is used in the create_dataset function to generate date column
 random_dates = pd.date_range(start_date, end_date).to_list()
-trans_num = 1000
-num_of_borrowers = 200
-num_of_loans = 200
+trans_num = 100000
+num_of_borrowers = 20000
+num_of_loans = 20000
+
 
 
 def create_dataset(num=1):
@@ -46,6 +46,8 @@ def create_dataset(num=1):
               for x in range(num)
             ]
     df = pd.DataFrame(output)
+    print(len(list(range(1, trans_num + 1))))
+    print(len(df["trans_status"].to_list()))
     df["transaction_id"] = list(range(1, trans_num + 1))
     df["borrower_id"] = list(range(1, num_of_borrowers + 1))*5
     return df
@@ -226,13 +228,15 @@ def save_datasets():
     check if a data set does not exist in the current working directory
     and save it else do nothing.
     """
-    if not os.path.isfile('loan_dataset.csv'):
-        loan_dataset.to_csv('loan_dataset.csv', header='column_names')
-    if not os.path.isfile('trans_dataset.csv'):
-        trans_dataset.to_csv('trans_dataset.csv', header='column_names')
-    if not os.path.isfile('borrower_dataset.csv'):
-        borrower_dataset.to_csv('borrower_dataset.csv', header='column_names')
+    if not os.path.isfile('datasets/loan_dataset.csv'):
+        loan_dataset.to_csv('datasets/loan_dataset.csv', header='column_names')
+    if not os.path.isfile('datasets/trans_dataset.csv'):
+        trans_dataset.to_csv('datasets/trans_dataset.csv',
+                             header='column_names')
+    if not os.path.isfile('datasets/borrower_dataset.csv'):
+        borrower_dataset.to_csv('datasets/borrower_dataset.csv',
+                                header='column_names')
     return None
 
 
-# save_datasets()
+save_datasets()
