@@ -1,25 +1,28 @@
-import os
+"""configure the application using a python module called
+decouple."""
 
 
-class Config(object):
+from decouple import config
+
+
+
+class Config():
     DEBUG = False
     TESTING = False
-    SQLALCHEMY_DATABASE_URI = os.environ["DATABASE_URL"]
+    SECRET_KEY = config('SECRET_KEY')
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 class ProductionConfig(Config):
-    ENV = "production"
-    SECRET_KEY = os.environ["SECRET"]
-    SQLALCHEMY_DATABASE_URI = os.environ["DATABASE_URL"]
+    DB_NAME = 'ProductionCreditScore'
+    SQLALCHEMY_DATABASE_URI = config('PRODUCTION_URI')
 
 
 class DevelopmentConfig(Config):
-    ENV = "development"
     DEBUG = True
-    TESTING = True
-    SECRET_KEY = os.environ["SECRET"]
-    SQLALCHEMY_DATABASE_URI = os.environ["DATABASE_URL"]
-
+    DB_NAME = 'DevelopmentCreditScore'
+    SQLALCHEMY_DATABASE_URI = config('DEVELOPMENT_URI')
 
 class TestingConfig(Config):
     TESTING = True
+    SQLALCHEMY_DATABASE_URI = config('TESTING_URI')
