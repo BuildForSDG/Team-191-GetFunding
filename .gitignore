@@ -1,13 +1,13 @@
 # FILES
 **/**/.pyc
 .DS_Store
-
+.env
 config.sh
-config.py
+
 
 # DIRECTORIES
 **/**/__pycache__
-.vscode/ 
+.vscode/
 .pytest_cache
 src.egg-info
 
