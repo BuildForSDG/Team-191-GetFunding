@@ -46,8 +46,6 @@ def create_dataset(num=1):
               for x in range(num)
             ]
     df = pd.DataFrame(output)
-    print(len(list(range(1, trans_num + 1))))
-    print(len(df["trans_status"].to_list()))
     df["transaction_id"] = list(range(1, trans_num + 1))
     df["borrower_id"] = list(range(1, num_of_borrowers + 1))*5
     return df
@@ -57,7 +55,7 @@ trans_dataset = create_dataset(num=trans_num)
 
 
 
-def create_sub_dataset(df, containing, column_filter, myrange):
+def create_sub_dataset(df, containing, column_filter, myrange=None):
     """
     Separate transactional data set into subsets.
     Given a dataframe, filter the dataframe for rows containing
@@ -67,6 +65,9 @@ def create_sub_dataset(df, containing, column_filter, myrange):
     amount and return a dataframe.
     """
     df = df[df[str(column_filter)].str.contains(str(containing))]
+    if myrange is None:
+        df = df.drop(["trans_status"], axis=1)
+        return df
     df["amount"] = np.random.choice(list(myrange),
                                     size=len(df["trans_status"]),
                                     replace=True)
@@ -229,13 +230,14 @@ def save_datasets():
     and save it else do nothing.
     """
     if not os.path.isfile('datasets/loan_dataset.csv'):
-        loan_dataset.to_csv('datasets/loan_dataset.csv', header='column_names')
+        loan_dataset.to_csv('datasets/loan_dataset.csv', header='column_names',
+                            index=False)
     if not os.path.isfile('datasets/trans_dataset.csv'):
         trans_dataset.to_csv('datasets/trans_dataset.csv',
-                             header='column_names')
+                             header='column_names', index=False)
     if not os.path.isfile('datasets/borrower_dataset.csv'):
         borrower_dataset.to_csv('datasets/borrower_dataset.csv',
-                                header='column_names')
+                                header='column_names', index=False)
     return None
 
 
