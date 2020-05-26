@@ -12,7 +12,6 @@ def reg_lender():
     METHODS: POST
     """
     user_data = request.get_json()
-    print(user_data)
     check_user_data(user_data)
     try:
         lender = src.models.Lender()
@@ -26,7 +25,7 @@ def reg_lender():
         src.db.session.add(user)
         src.db.session.commit()
     except KeyError as key:
-        return Response("Check "+str(key), 400)
+        return Response("Check your request", 400)
     else:
         return Response("Lender has been added!", 200)
 
@@ -52,7 +51,7 @@ def reg_borrower():
         src.db.session.add(user)
         src.db.session.commit()
     except KeyError as key:
-        return Response("Check "+str(key), 400)
+        return Response("Check your request", 400)
     return Response("Borrower has been added!", 200)
 
 
@@ -73,8 +72,8 @@ def check_user_data(user_info):
         phone = user_info["phone_number"]
         phone_result = src.models.User.query.filter_by(phone_number=phone).first()
     except KeyError as key:
-        abort(Response(str(key)+"is missing", 400))
+        abort(Response("Check your request", 400))
     except Exception as err:
-        abort(Response("Check your request "+str(err), 400))
+        abort(Response("Server Error ", 500))
     if email_result is not None or phone_result is not None:
         abort(Response("User in db", 409))
