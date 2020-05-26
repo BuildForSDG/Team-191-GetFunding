@@ -1,10 +1,36 @@
 # FILES
 **/**/.pyc
 .DS_Store
+.env
 config.sh
-config.py
+
+
 # DIRECTORIES
 **/**/__pycache__
 .vscode/
 .pytest_cache
 src.egg-info
+
+
+
+# dependencies
+UI/node_modules
+UI/.pnp
+UI/.pnp.js
+
+# testing
+UI/coverage
+
+# production
+UI/build
+
+# misc
+UI/.DS_Store
+UI/.env.local
+UI/.env.development.local
+UI/.env.test.local
+UI/.env.production.local
+
+UI/npm-debug.log*
+UI/yarn-debug.log*
+UI/yarn-error.log*

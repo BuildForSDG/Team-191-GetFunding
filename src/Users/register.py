@@ -17,11 +17,11 @@ def reg_lender():
         lender = src.models.Lender()
         name = user_data["name"]
         email = user_data["email"]
-        password = user_data["password"]
+        passw = user_data["password"]
         phone_number = user_data["phone_number"]
         user = src.models.User(name=name, email=email,
-                    password=generate_password_hash(password=password),
-                    phone_number=phone_number, lender=lender)
+                               password=generate_password_hash(password=passw),
+                               phone_number=phone_number, lender=lender)
         src.db.session.add(user)
         src.db.session.commit()
     except KeyError as key:
@@ -43,11 +43,11 @@ def reg_borrower():
         borrower = src.models.Borrower()
         name = user_data["name"]
         email = user_data["email"]
-        password = user_data["password"]
+        passw = user_data["password"]
         phone_number = user_data["phone_number"]
         user = src.models.User(name=name, email=email,
-                    password=generate_password_hash(password=password),
-                    phone_number=phone_number, borrower=borrower)
+                               password=generate_password_hash(password=passw),
+                               phone_number=phone_number, borrower=borrower)
         src.db.session.add(user)
         src.db.session.commit()
     except KeyError as key:
@@ -70,7 +70,8 @@ def check_user_data(user_info):
         email = user_info["email"]
         email_result = src.models.User.query.filter_by(email=email).first()
         phone = user_info["phone_number"]
-        phone_result = src.models.User.query.filter_by(phone_number=phone).first()
+        phone_result = (src.models.User.query.
+        	            filter_by(phone_number=phone).first())
     except KeyError as key:
         abort(Response("Check your request", 400))
     except Exception as err:
