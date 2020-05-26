@@ -19,9 +19,8 @@ end_date = date(2020, 4, 1)
 # random_dates is used in the create_dataset function to generate date column
 random_dates = pd.date_range(start_date, end_date).to_list()
 trans_num = 100000
-num_of_borrowers = 20000
-num_of_loans = 20000
-
+num_of_borrowers = int(trans_num/20)
+num_of_loans = int(trans_num/5)
 
 
 def create_dataset(num=1):
@@ -47,7 +46,7 @@ def create_dataset(num=1):
             ]
     df = pd.DataFrame(output)
     df["transaction_id"] = list(range(1, trans_num + 1))
-    df["borrower_id"] = list(range(1, num_of_borrowers + 1))*5
+    df["borrower_id"] = list(range(1, num_of_borrowers + 1))*20
     return df
 
 
@@ -120,8 +119,7 @@ def create_loan_dataset(num=1):
                                           df["date_disbursed"] +
                                           pd.offsets.MonthOffset(3)))
     df["loan_id"] = list(range(1, len(df["date_repaid"]) + 1))
-    df["borrower_id"] = np.random.choice(list(range(1, num_of_borrowers + 1)),
-                                         size=num, replace=True)
+    df["borrower_id"] = list(range(1, num_of_borrowers + 1))*4
     return df
 
 
