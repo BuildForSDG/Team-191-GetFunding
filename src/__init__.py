@@ -15,7 +15,6 @@ def create_app():
         app.config.from_object("configuration.DevelopmentConfig")
     else:
         app.config.from_object("configuration.TestingConfig")
-
     with app.app_context():
         db.init_app(app)
         from src.Users import register_bp
