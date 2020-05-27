@@ -36,7 +36,7 @@ def create_loan_dataset():
 loan_dataset = create_loan_dataset()
 
 def create_borrower_dataset():
-    df = pd.read_csv("datasets/borrower_dataset.csv")
+    df = pd.read_csv("datasets/train_set.csv")
     df["birth_date"] = pd.to_datetime(df["birth_date"])
     df = dummy_encode_variable(df, ["borrower_gender"])
     return df

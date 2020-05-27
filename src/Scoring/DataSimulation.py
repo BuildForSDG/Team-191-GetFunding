@@ -12,13 +12,14 @@ import warnings
 
 from datetime import date
 from functools import reduce
+from sklearn.model_selection import train_test_split
 
 
 start_date = date(2020, 1, 1)
 end_date = date(2020, 4, 1)
 # random_dates is used in the create_dataset function to generate date column
 random_dates = pd.date_range(start_date, end_date).to_list()
-trans_num = 100000
+trans_num = 200000
 num_of_borrowers = int(trans_num/20)
 num_of_loans = int(trans_num/5)
 
@@ -219,6 +220,12 @@ def create_borrower_dataset(df1, num=1):
 
 
 borrower_dataset = create_borrower_dataset(final_df, num_of_borrowers)
+# shuffle data set
+borrower_dataset = borrower_dataset.sample(frac=1)
+#separate data set into a train set and validation set
+validation_set = borrower_dataset.head(int(trans_num/2))
+train_set = borrower_dataset.tail(int(trans_num/2))
+
 
 
 def save_datasets():
@@ -233,8 +240,11 @@ def save_datasets():
     if not os.path.isfile('datasets/trans_dataset.csv'):
         trans_dataset.to_csv('datasets/trans_dataset.csv',
                              header='column_names', index=False)
-    if not os.path.isfile('datasets/borrower_dataset.csv'):
-        borrower_dataset.to_csv('datasets/borrower_dataset.csv',
+    if not os.path.isfile('datasets/validation_set.csv'):
+        validation_set.to_csv('datasets/validation_set.csv',
+                                header='column_names', index=False)
+    if not os.path.isfile('datasets/train_set.csv'):
+        train_set.to_csv('datasets/train_set.csv',
                                 header='column_names', index=False)
     return None
 
