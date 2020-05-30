@@ -1,5 +1,5 @@
 {
-  "name": "ui",
+  "name": "frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^7.2.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1"
   },
   "scripts": {
@@ -34,5 +35,9 @@
   "devDependencies": {
     "stylelint": "^13.3.3",
     "stylelint-config-standard": "^20.0.0"
-  }
+  },
+  "description": "In the project directory, you can run:",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC"
 }
