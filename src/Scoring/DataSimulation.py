@@ -1,4 +1,5 @@
 """ Create a synthetic dataframe.
+
 This module is used to generate datasets that are used for model development.
 """
 

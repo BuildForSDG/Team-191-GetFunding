@@ -1,6 +1,4 @@
-""" Test that data simulation is working.
-
-"""
+""" Test that data simulation is working."""
 
 import unittest
 import sys
