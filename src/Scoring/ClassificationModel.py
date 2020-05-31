@@ -9,6 +9,20 @@ import featuretools.variable_types as vtypes
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 
+trans_df = None
+loan_df = None
+borrower_df = None
+
+
+if trans_df == None:
+    trans_df = pd.read_csv("datasets/trans_dataset.csv")
+else if loan_df = None:
+    loan_df = pd.read_csv("datasets/loan_dataset.csv")
+else if == None:
+    borrower_df = pd.read_csv("datasets/train_set.csv")
+else:
+  pass
+
 
 def dummy_encode_variable(df, columns_to_encode=[]):
     if columns_to_encode:
@@ -16,7 +30,7 @@ def dummy_encode_variable(df, columns_to_encode=[]):
     return df
 
 
-trans_df = pd.read_csv("datasets/trans_dataset.csv")
+
 
 
 def create_trans_dataset(df):
@@ -27,7 +41,7 @@ def create_trans_dataset(df):
 
 
 trans_dataset = create_trans_dataset(trans_df)
-loan_df = pd.read_csv("datasets/loan_dataset.csv")
+
 
 
 def create_loan_dataset(df):
@@ -37,7 +51,6 @@ def create_loan_dataset(df):
 
 
 loan_dataset = create_loan_dataset(loan_df)
-borrower_df = pd.read_csv("datasets/train_set.csv")
 
 
 def create_borrower_dataset(df):
@@ -138,10 +151,11 @@ agg_primitives = (["sum", "std", "max", "min", "mean", "count",
 
 
 def do_feature_engineering(entity_set):
-    feature_matrix = ft.dfs(entityset=entity_set,
-                            target_entity="borrower_data",
-                            agg_primitives=agg_primitives,
-                            n_jobs=1, verbose=1, features_only=False)
+    feature_matrix, feature_names = ft.dfs(entityset=entity_set,
+                                           target_entity="borrower_data",
+                                           agg_primitives=agg_primitives,
+                                           n_jobs=1, verbose=1,
+                                           features_only=False)
     feature_matrix.reset_index(inplace = True)
     finaldf = pd.DataFrame(feature_matrix)
     return finaldf
@@ -180,11 +194,7 @@ default_model = create_model()
 
 
 filename = 'model_prediction'
-outfile = open(filename,'wb')
+outfile = open(filename, 'wb')
 
 pickle.dump(default_model,outfile)
-
-
-with open('', 'wb') as model_prediction:
-    #save the model
-    default_model = pickle.dumps(default_model, f)
+outfile.close()
