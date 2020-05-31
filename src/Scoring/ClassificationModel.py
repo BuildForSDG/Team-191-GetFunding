@@ -187,5 +187,6 @@ default_model = create_model()
 # cnf_matrix
 
 # save the model
-pickle.dumps(default_model)
-# knn_from_pickle = pickle.loads(saved_model)
+default_model = pickle.dumps(default_model)
+# print(dir(pickle))
+knn_from_pickle = pickle.loads(default_model)
