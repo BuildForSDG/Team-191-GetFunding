@@ -1,16 +1,11 @@
 import pandas as pd
-import numpy as np
 import pickle
-
-
-from datetime import date
 
 
 import featuretools as ft
 import featuretools.variable_types as vtypes
 
 
-from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 
@@ -143,11 +138,10 @@ agg_primitives = (["sum", "std", "max", "min", "mean", "count",
 
 
 def do_feature_engineering(entity_set):
-    feature_matrix, feature_names = ft.dfs(entityset=entity_set,
-                                           target_entity="borrower_data",
-                                           agg_primitives=agg_primitives,
-                                           n_jobs=1, verbose=1,
-                                           features_only=False)
+    feature_matrix = ft.dfs(entityset=entity_set,
+                            target_entity="borrower_data",
+                            agg_primitives=agg_primitives,
+                            n_jobs=1, verbose=1, features_only=False)
     feature_matrix.reset_index(inplace = True)
     finaldf = pd.DataFrame(feature_matrix)
     return finaldf
@@ -182,11 +176,15 @@ def create_model():
 
 
 default_model = create_model()
-# y_pred=make_prediction().predict(x_test)
-# cnf_matrix = metrics.confusion_matrix(y_test, y_pred)
-# cnf_matrix
 
-# save the model
-default_model = pickle.dumps(default_model)
-# print(dir(pickle))
-knn_from_pickle = pickle.loads(default_model)
+
+
+filename = 'model_prediction'
+outfile = open(filename,'wb')
+
+pickle.dump(default_model,outfile)
+
+
+with open('', 'wb') as model_prediction:
+    #save the model
+    default_model = pickle.dumps(default_model, f)

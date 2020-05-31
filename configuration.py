@@ -1,4 +1,5 @@
-"""configure the application using a python module called
+"""
+configure the application using a python module called
 decouple."""
 
 

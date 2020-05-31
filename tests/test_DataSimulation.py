@@ -1,5 +1,4 @@
-"""
-Test that data simulation is working.
+""" Test that data simulation is working.
 
 """
 

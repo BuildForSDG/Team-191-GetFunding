@@ -1,5 +1,4 @@
-"""
-Create a synthetic dataframe.
+""" Create a synthetic dataframe.
 This module is used to generate datasets that are used for model development.
 """
 
@@ -7,12 +6,10 @@ import random
 import pandas as pd
 import numpy as np
 import os
-import warnings
 
 
 from datetime import date
 from functools import reduce
-from sklearn.model_selection import train_test_split
 
 
 start_date = date(2020, 1, 1)
@@ -98,7 +95,8 @@ trans_dataset = combine_trans_sets(trans_dataset)
 
 
 def create_loan_dataset(num=1):
-    """ Generate a loan data set.
+    """
+    Generate a loan data set.
     Generate a repayment period a date disbursed and a loan amount.
     Then add columns of date_repaid, loan, and borrower ids.
     """
