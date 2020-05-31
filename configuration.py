@@ -14,15 +14,14 @@ class MainConfig():
 
 
 class ProductionConfig(MainConfig):
-    DB_NAME = 'ProductionCreditScore'
     SQLALCHEMY_DATABASE_URI = config('PRODUCTION_URI')
 
 
 class DevelopmentConfig(MainConfig):
-    DEBUG = True
-    DB_NAME = 'DevelopmentCreditScore'
     SQLALCHEMY_DATABASE_URI = config('DEVELOPMENT_URI')
 
 class TestingConfig(MainConfig):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = config('TESTING_URI')
+
+
