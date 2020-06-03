@@ -20,10 +20,10 @@ class User(UserMixin, src.db.Model):
     borrower = src.db.relationship('Borrower', backref=src.db.backref("user",
                                                               lazy=True))
     def is_authenticated(self):
-        return True
+        return self.confirmed
 
     def is_active(self):
-        return self.confirmed
+        return True
 
     def is_anonymous(self):
         return False
