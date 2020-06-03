@@ -1,7 +1,9 @@
-"""Backend configuration.
+"""
+Backend configuration.
 
 configure the application using a python module called
-decouple."""
+decouple.
+"""
 
 
 from decouple import config

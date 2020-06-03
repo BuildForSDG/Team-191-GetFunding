@@ -16,7 +16,7 @@ borrower_df = None
 
 if trans_df == None:
     trans_df = pd.read_csv("datasets/trans_dataset.csv")
-else if loan_df = None:
+else if loan_df == None:
     loan_df = pd.read_csv("datasets/loan_dataset.csv")
 else if == None:
     borrower_df = pd.read_csv("datasets/train_set.csv")

@@ -104,8 +104,7 @@ def create_loan_dataset(num=1):
     output = [
               {"repayment_period": np.random.choice([1, 2, 3],
                                                     p=[0.7, 0.2, 0.1]),
-               "date_disbursed": np.random.choice(random_dates),
-               "loan_amount": random.randrange(100, 35000, 5)
+               "date_disbursed": np.random.choice(random_dates)
                }
               for x in range(num)
              ]
