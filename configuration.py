@@ -9,6 +9,7 @@ from decouple import config
 class MainConfig():
     DEBUG = False
     TESTING = False
+    JWT_SECRET_KEY=config('SECRET_KEY')
     SECRET_KEY = config('SECRET_KEY')
     SECURITY_PASSWORD_SALT = config('PASSWORD_SALT')
     MAIL_SERVER = str(config('MAIL_DEFAULT_SERVER'))

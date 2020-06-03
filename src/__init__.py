@@ -3,11 +3,13 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_jwt_extended import JWTManager
 from flask_mail import Mail
 import os
 db = SQLAlchemy()
 login = LoginManager()
 mail = Mail()
+jwt = JWTManager()
 from src import models
 from decouple import config
 
@@ -24,8 +26,11 @@ def create_app():
         db.init_app(main_app)
         mail.init_app(main_app)
         login.init_app(main_app)
+        jwt.init_app(main_app)
         from src.Users import register_bp
         main_app.register_blueprint(register_bp)
+        from src.Users import login_bp
+        main_app.register_blueprint(login_bp)
         db.create_all()
     return main_app
 

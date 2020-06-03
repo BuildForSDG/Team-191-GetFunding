@@ -2,7 +2,6 @@ from flask import Blueprint, request, abort, Response, url_for, render_template
 from werkzeug.security import generate_password_hash
 from src.token import generate_confirmation_token, confirm_token
 from src.email import send_email
-from flask_login import login_required, login_user
 import src
 register_bp = Blueprint("reg_bp", __name__, url_prefix="/register", template_folder="templates")
 
@@ -30,10 +29,8 @@ def reg_lender():
         token = generate_confirmation_token(user.email)
         confirm_url = url_for("reg_bp.confirm_user", token=token, _external=True)
         html = str(render_template("activatemail.html", confirm_url = confirm_url))
-        print(html)
         subject = "Confirmation of your email"
         send_email(user.email, subject, html)
-        login_user(user)
     except KeyError as key:
         return Response("Check your request", 400)
     else:
@@ -61,11 +58,10 @@ def reg_borrower():
         src.db.session.add(user)
         src.db.session.commit()
         token = generate_confirmation_token(user.email)
-        confirm_url = url_for("src.confirm_user", token=token, _external=True)
+        confirm_url = url_for("reg_bp.confirm_user", token=token, _external=True)
         html = render_template("activatemail.html", confirm_url = confirm_url)
         subject = "Confirmation of your email"
         send_email(user.email, subject, html)
-        login_user(user)
     except KeyError as key:
         return Response("Check your request", 400)
     return Response("Borrower has been added!", 200)
