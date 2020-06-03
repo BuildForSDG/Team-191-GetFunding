@@ -34,3 +34,9 @@ User Data from frontend:
         "Password",<password>,
         "national_id":<national_id/passport> (My suggestion of unique identifier of each user, what do you think?)
     }
+
+Registration process 
+    We get the details for registration.
+    Send email of confirmation link to email.
+    Then confirm the user is correct.
+    After login, JWT token sent.
