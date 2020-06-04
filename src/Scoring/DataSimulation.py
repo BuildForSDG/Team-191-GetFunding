@@ -164,6 +164,66 @@ def sum_total_details(df):
 
 df_merged = sum_total_details(trans_dataset)
 
+def find_mean_total_in(df, filters):
+    """
+    Find sum by transaction details.
+    Filter data set by transaction details, group by borrower_id, find the sum
+    by borrower_id, and rename the total_amount to the total plus the
+    transcation details.
+    """
+    df1 = df.loc[df["trans_details"].str.contains(str(filters))]
+    df2 = (df1.groupby(["borrower_id"]).
+           agg({'total_amount': 'mean'}).reset_index())
+    df3 = df2.rename(columns={"total_amount": "total_" + str(filters)})
+    return df3
+
+
+def sum_total2_details(df):
+    """
+    Find the sum of transactional detail by borrower_id.
+    Use subset_datasets to find the total of every transaction for every
+    borrower_id and merge the resulting data sets (outer join to keep
+    rows from all data sets) and fill Nans with zero.
+    """
+    withdrawal = find_mean_total_in(df, "withdrawal")
+    customer_transfers = find_mean_total_in(df, "transfer")
+    deposits = find_mean_total_in(df, "deposit")
+    airtime_purchases = find_mean_total_in(df, "airtime")
+    funds_received = find_mean_total_in(df, "received")
+    # Merge dataframes by borrower_id and fill missing values with zero
+    data_frames = [withdrawal, customer_transfers,
+                   deposits, airtime_purchases, funds_received]
+    df_merged = reduce(lambda left, right: pd.merge(left, right,
+                                                    on=['borrower_id'],
+                                                    how='outer'),
+                       data_frames)
+    df_merged = df_merged.fillna(0)
+    df_merged["total_in"] = (df_merged["total_deposit"] +
+                             df_merged["total_received"])
+    return df_merged
+
+
+df_merged1 = sum_total2_details(trans_dataset)
+
+
+def add_loan_amount(df_merged1, loan_dataset):
+    """
+    Add a loan amount column to the loan dataset.
+    Select the borrower id and the total_in from the df_merged1 dataset,
+    add a loan amount as 30% of the total money in an
+    """
+    df_merged2 = df_merged1[["borrower_id", "total_in"]]
+    df_merged2["loan_amount"] = df_merged2["total_in"] * 0.3
+    df_merged2 = (df_merged2.groupby(["borrower_id"]).
+                  agg({'total_in': 'mean'}).reset_index())
+    df_merged2["loan_amount"] = df_merged2["total_in"]*0.3
+    df = pd.merge(loan_dataset, df_merged2, how='left', on=["borrower_id"])
+    del df["total_in"]
+    return df
+
+
+loan_dataset = add_loan_amount(df_merged1, loan_dataset)
+
 
 def find_defaulters(df):
     """
