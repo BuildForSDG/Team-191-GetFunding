@@ -25,7 +25,6 @@ if borrower_df == None:
 def dummy_encode_variable(df, columns_to_encode=[]):
     """
     Create dummy variables.
-
     Given a list of columns and a dataframe convert
     all the provide columns into dummy variables.
     """
@@ -40,7 +39,6 @@ def dummy_encode_variable(df, columns_to_encode=[]):
 def create_trans_dataset(df):
     """
     Prepare transactional data for machine learning.
-
     Convert the trans_date column to a datetime, and drop the trans_status
     columns and total amount. The trans_status is dropped because it may
     impact the model negatively. The total_amount column is dropped
@@ -58,7 +56,6 @@ trans_dataset = create_trans_dataset(trans_df)
 def create_loan_dataset(df):
     """
     Prepare loan data for machine learning.
-
     convert the date_disbursed column to datetime, and the
     date_repaid column to datetime and return a dataframe.
     """
@@ -73,7 +70,6 @@ loan_dataset = create_loan_dataset(loan_df)
 def create_borrower_dataset(df):
     """
     Prepare borrower data for machine learning.
-
     Given the loan_dataframe, convert the birth_date to datetime.
     using the dummy_encode_variable function definened above, create
     dummy variables for the borrower_gender column and return the
@@ -89,7 +85,6 @@ borrower_dataset = create_borrower_dataset(borrower_df)
 def create_target_df(df, unique_id, target):
     """
     Create a dataframe with a unique_id and the target variable.
-
     Given a dataframe and a column called unique_id create a
     dataframe containing the unique_id and the target columns
     only.
@@ -104,7 +99,6 @@ target_df = create_target_df(borrower_dataset, "borrower_id", "defaulters")
 def remove_target_from_df(df, column_to_drop):
     """
     Given a dataframe remove the target variable.
-
     Given a dataframe and a column(the target variable), drop
     the target variable from the dataframe and return a dataframe.
     """
@@ -119,7 +113,6 @@ final_borrower_dataset = remove_target_from_df(borrower_dataset, "defaulters")
 def create_transactions_entity_set():
     """
     Create an empty entity set and add entities.
-
     Initialize an empty entity set called transactions declare all
     variable types present in the transactional dataframe so that
     feature tools can unserstand the variables,
@@ -149,7 +142,6 @@ es =create_transactions_entity_set()
 def create_loan_entity_set(es):
     """
     Add the loan dataset to the entity set.
-
     Given an entity set create variable type from the loan data set,
     create an entity called loan data, and add add the created entityset
     to es and return es(an entyrty set)
@@ -173,7 +165,6 @@ es = create_loan_entity_set(es)
 def create_borrower_entity_set(es):
     """
     Add borrower entity set to es.
-
     Given an entityset(es) declare variables types from the borrwer dataset,
     create an entity set call borrwer_data, and add the borrower data
     entity set to the provide enityt set and return the final entiyty set.
@@ -197,7 +188,6 @@ es = create_borrower_entity_set(es)
 def add_relations_to_es(es):
     """
     Add table relationships to the entity set.
-
     Given an entity set add relationships between the borrower data
     and the transactions data to the entityset. Also, add the
     relationship between borrower data and loan data to the
@@ -244,12 +234,9 @@ def add_target_to_features(df1, df2, columns_to_drop=[], merge_on=None):
     Now, given df1 which is the dataframe produced after feature enginnering,
     return the target variable to the data by merging finaldf with target df
     on merge_on and drop the id columns column because they do impact
-    prediction and return the resulting dataframe.
+    prediction. Fill nans with zero and return the resulting dataframe.
     """
-    # print("***************************************************")
-    # print("***************************************************")
-    # print("***************************************************")
-    # print(merge_on in df2.columns.to_list())
     final_data = pd.merge(df1, df2, on=merge_on, how="left")
     final_data = final_data.drop(columns_to_drop, axis = 1)
+    final_data = final_data.fillna(0)
     return final_data

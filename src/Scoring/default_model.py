@@ -41,12 +41,12 @@ def create_default_model(x_train, y_train):
     logreg = LogisticRegression(C=1.0, class_weight=None, dual=False,
                                 fit_intercept=True, intercept_scaling=1,
                                 max_iter=110, multi_class='ovr',
-                                n_jobs=1, penalty='l1', random_state=None,
+                                n_jobs=2, penalty='l1', random_state=None,
                                 solver='liblinear', tol=0.0001, verbose=0,
                                 warm_start=False)
     ## fit the model with data
-    saved_model = logreg.fit(x_train, y_train)
-    return saved_model
+    saved_logreg = logreg.fit(x_train, y_train)
+    return saved_logreg
 
 # Create the model using the function above.
 default_model = create_model(x_train, y_train)

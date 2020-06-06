@@ -101,23 +101,3 @@ def add_relations_to_es(es):
 
 entity_set = add_relations_to_es(es)
 
-
-# def add_target_to_features(df1, df2, columns_to_drop=[], merge_on=None):
-#     """
-#     Return target variable to final_df.
-#     Remember we removed the taget variable prior to feature engineering.
-#     Now, given df1 which is the dataframe produced after feature enginnering,
-#     return the target variable to the data set and drop the borrower_id
-#     column because it is not a variable and return the resulting
-#     dataframe.
-#     """
-#     final_data = pd.merge(finaldf, target_df , on=merge_on, how="left")
-#     final_data = final_data.drop(, axis = 1)
-#     return final_data
-
-
-# final_data = add_target_to_features(finaldf, target_df, ["borrower_id"],
-#                                     "borrower_id")
-
-
-# columns_to_drop = ["loan_id", "borrower_id", "transaction_id"]
