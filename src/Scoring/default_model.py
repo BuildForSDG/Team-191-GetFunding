@@ -53,7 +53,7 @@ default_model = create_model(x_train, y_train)
 
 
 # Create a file called model_prediction, and open the file.
-filename = 'model_prediction'
+filename = 'default_prediction'
 outfile = open(filename, 'wb')
 
 
