@@ -1,5 +1,5 @@
-"""
-Create a synthetic dataframe.
+""" Create a synthetic dataframe.
+
 This module is used to generate datasets that are used for model development.
 """
 
@@ -7,21 +7,19 @@ import random
 import pandas as pd
 import numpy as np
 import os
-import warnings
 
 
 from datetime import date
 from functools import reduce
 
 
-warnings.filterwarnings('ignore')
 start_date = date(2020, 1, 1)
 end_date = date(2020, 4, 1)
 # random_dates is used in the create_dataset function to generate date column
 random_dates = pd.date_range(start_date, end_date).to_list()
-trans_num = 1000
-num_of_borrowers = 200
-num_of_loans = 200
+trans_num = 200000
+num_of_borrowers = int(trans_num/20)
+num_of_loans = int(trans_num/5)
 
 
 def create_dataset(num=1):
@@ -47,7 +45,7 @@ def create_dataset(num=1):
             ]
     df = pd.DataFrame(output)
     df["transaction_id"] = list(range(1, trans_num + 1))
-    df["borrower_id"] = list(range(1, num_of_borrowers + 1))*5
+    df["borrower_id"] = list(range(1, num_of_borrowers + 1))*20
     return df
 
 
@@ -55,7 +53,7 @@ trans_dataset = create_dataset(num=trans_num)
 
 
 
-def create_sub_dataset(df, containing, column_filter, myrange):
+def create_sub_dataset(df, containing, column_filter, myrange=None):
     """
     Separate transactional data set into subsets.
     Given a dataframe, filter the dataframe for rows containing
@@ -65,6 +63,9 @@ def create_sub_dataset(df, containing, column_filter, myrange):
     amount and return a dataframe.
     """
     df = df[df[str(column_filter)].str.contains(str(containing))]
+    if myrange is None:
+        df = df.drop(["trans_status"], axis=1)
+        return df
     df["amount"] = np.random.choice(list(myrange),
                                     size=len(df["trans_status"]),
                                     replace=True)
@@ -95,15 +96,15 @@ trans_dataset = combine_trans_sets(trans_dataset)
 
 
 def create_loan_dataset(num=1):
-    """ Generate a loan data set.
+    """
+    Generate a loan data set.
     Generate a repayment period a date disbursed and a loan amount.
     Then add columns of date_repaid, loan, and borrower ids.
     """
     output = [
               {"repayment_period": np.random.choice([1, 2, 3],
                                                     p=[0.7, 0.2, 0.1]),
-               "date_disbursed": np.random.choice(random_dates),
-               "loan_amount": random.randrange(100, 35000, 5)
+               "date_disbursed": np.random.choice(random_dates)
                }
               for x in range(num)
              ]
@@ -117,8 +118,7 @@ def create_loan_dataset(num=1):
                                           df["date_disbursed"] +
                                           pd.offsets.MonthOffset(3)))
     df["loan_id"] = list(range(1, len(df["date_repaid"]) + 1))
-    df["borrower_id"] = np.random.choice(list(range(1, num_of_borrowers + 1)),
-                                         size=num, replace=True)
+    df["borrower_id"] = list(range(1, num_of_borrowers + 1))*4
     return df
 
 
@@ -163,6 +163,66 @@ def sum_total_details(df):
 
 
 df_merged = sum_total_details(trans_dataset)
+
+def find_mean_total_in(df, filters):
+    """
+    Find sum by transaction details.
+    Filter data set by transaction details, group by borrower_id, find the sum
+    by borrower_id, and rename the total_amount to the total plus the
+    transcation details.
+    """
+    df1 = df.loc[df["trans_details"].str.contains(str(filters))]
+    df2 = (df1.groupby(["borrower_id"]).
+           agg({'total_amount': 'mean'}).reset_index())
+    df3 = df2.rename(columns={"total_amount": "total_" + str(filters)})
+    return df3
+
+
+def sum_total2_details(df):
+    """
+    Find the sum of transactional detail by borrower_id.
+    Use subset_datasets to find the total of every transaction for every
+    borrower_id and merge the resulting data sets (outer join to keep
+    rows from all data sets) and fill Nans with zero.
+    """
+    withdrawal = find_mean_total_in(df, "withdrawal")
+    customer_transfers = find_mean_total_in(df, "transfer")
+    deposits = find_mean_total_in(df, "deposit")
+    airtime_purchases = find_mean_total_in(df, "airtime")
+    funds_received = find_mean_total_in(df, "received")
+    # Merge dataframes by borrower_id and fill missing values with zero
+    data_frames = [withdrawal, customer_transfers,
+                   deposits, airtime_purchases, funds_received]
+    df_merged = reduce(lambda left, right: pd.merge(left, right,
+                                                    on=['borrower_id'],
+                                                    how='outer'),
+                       data_frames)
+    df_merged = df_merged.fillna(0)
+    df_merged["total_in"] = (df_merged["total_deposit"] +
+                             df_merged["total_received"])
+    return df_merged
+
+
+df_merged1 = sum_total2_details(trans_dataset)
+
+
+def add_loan_amount(df_merged1, loan_dataset):
+    """
+    Add a loan amount column to the loan dataset.
+    Select the borrower id and the total_in from the df_merged1 dataset,
+    add a loan amount as 30% of the total money in an
+    """
+    df_merged2 = df_merged1[["borrower_id", "total_in"]]
+    df_merged2["loan_amount"] = df_merged2["total_in"] * 0.3
+    df_merged2 = (df_merged2.groupby(["borrower_id"]).
+                  agg({'total_in': 'mean'}).reset_index())
+    df_merged2["loan_amount"] = df_merged2["total_in"]*0.3
+    df = pd.merge(loan_dataset, df_merged2, how='left', on=["borrower_id"])
+    del df["total_in"]
+    return df
+
+
+loan_dataset = add_loan_amount(df_merged1, loan_dataset)
 
 
 def find_defaulters(df):
@@ -218,6 +278,12 @@ def create_borrower_dataset(df1, num=1):
 
 
 borrower_dataset = create_borrower_dataset(final_df, num_of_borrowers)
+# shuffle data set
+borrower_dataset = borrower_dataset.sample(frac=1)
+#separate data set into a train set and validation set
+validation_set = borrower_dataset.head(int(trans_num/2))
+train_set = borrower_dataset.tail(int(trans_num/2))
+
 
 
 def save_datasets():
@@ -226,13 +292,19 @@ def save_datasets():
     check if a data set does not exist in the current working directory
     and save it else do nothing.
     """
-    if not os.path.isfile('loan_dataset.csv'):
-        loan_dataset.to_csv('loan_dataset.csv', header='column_names')
-    if not os.path.isfile('trans_dataset.csv'):
-        trans_dataset.to_csv('trans_dataset.csv', header='column_names')
-    if not os.path.isfile('borrower_dataset.csv'):
-        borrower_dataset.to_csv('borrower_dataset.csv', header='column_names')
+    if not os.path.isfile('datasets/loan_dataset.csv'):
+        loan_dataset.to_csv('datasets/loan_dataset.csv', header='column_names',
+                            index=False)
+    if not os.path.isfile('datasets/trans_dataset.csv'):
+        trans_dataset.to_csv('datasets/trans_dataset.csv',
+                             header='column_names', index=False)
+    if not os.path.isfile('datasets/validation_set.csv'):
+        validation_set.to_csv('datasets/validation_set.csv',
+                                header='column_names', index=False)
+    if not os.path.isfile('datasets/train_set.csv'):
+        train_set.to_csv('datasets/train_set.csv',
+                                header='column_names', index=False)
     return None
 
 
-# save_datasets()
+save_datasets()

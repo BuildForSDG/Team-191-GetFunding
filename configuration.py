@@ -1,5 +1,9 @@
-"""configure the application using a python module called
-decouple."""
+"""
+Backend configuration.
+
+configure the application using a python module called
+decouple.
+"""
 
 
 from decouple import config
@@ -18,9 +22,10 @@ class ProductionConfig(MainConfig):
 
 
 class DevelopmentConfig(MainConfig):
-    DEBUG = True
     SQLALCHEMY_DATABASE_URI = config('DEVELOPMENT_URI')
 
 class TestingConfig(MainConfig):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = config('TESTING_URI')
+
+
