@@ -1,22 +1,25 @@
 """src module."""
-
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-import os
-db = SQLAlchemy()
-from src import models
+from flask_hashing import Hashing
 
 
-def create_app():
-    app = Flask(__name__)
-    app.config.from_object(os.environ['SDG_CONFIG'])
-    with app.app_context():
-        db.init_app(app)
-        from src.Users import register_bp
-        app.register_blueprint(register_bp)
-        db.create_all()
-    return app
+
+app = Flask(__name__)
 
 
-def print_modules():
-    print(dir(models))
+if app.config['ENV'] == "production":
+	app.config.from_object("configuration.ProductionConfig")
+elif app.config['ENV'] == "development":
+	app.config.from_object("configuration.DevelopmentConfig")
+elif app.config['ENV'] == "testing":
+	app.config.from_object("configuration.TestingConfig")
+else:
+	pass
+
+
+db = SQLAlchemy(app)
+hashing = Hashing(app)
+
+# from Senddata.send_endpoints import assign_send_data_routes
+# from Users.users import assign_my_users_routes

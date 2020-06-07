@@ -1,0 +1,4 @@
+SECRET_KEY=R3JGS343J59HXND5QD98X0JAKWK5DEHT8Z3U2AGLQ0KQIYM7UFWNT04LAT3M302W8TJOVPJ3FMVKKO7R
+PRODUCTION_URI=postgresql+psycopg2://cycks:Actuarial2012@localhost/production
+DEVELOPMENT_URI=postgresql+psycopg2://cycks:Actuarial2012@localhost/development
+TESTING_URI=postgresql+psycopg2://cycks:Actuarial2012@localhost/testing

@@ -1,5 +1,8 @@
 """configure the application using a python module called
 decouple."""
+import random
+import os
+import string
 
 
 from decouple import config

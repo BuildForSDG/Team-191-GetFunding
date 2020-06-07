@@ -1,8 +1,6 @@
-from . import create_app
+"""The run file is used to run the entire application"""
+from __init__ import app
 
-app = create_app()
 
-
-def run():
-    global app
-    app.run(port="8084")
+if __name__ == "__main__":
+    app.run(debug=True, port=5000)
