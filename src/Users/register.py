@@ -14,6 +14,7 @@ def reg_lender():
     METHODS: POST
     """
     user_data = request.get_json()
+    print(user_data)
     check_user_data(user_data)
     try:
         lender = src.models.Lender()
@@ -65,6 +66,7 @@ def reg_borrower():
     except KeyError as key:
         return Response("Check your request", 400)
     return Response("Borrower has been added!", 200)
+
 
 @register_bp.route("/confirm/<token>/")
 def confirm_user(token):

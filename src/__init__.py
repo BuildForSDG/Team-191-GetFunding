@@ -15,7 +15,7 @@ from decouple import config
 
 def create_app():
     main_app = Flask(__name__)
-    main_app.config.from_object(config('SDG_CONFIG'))
+    main_app.config.from_object(config('configuration'))
     main_app.config['MAIL_SERVER']='smtp.gmail.com'
     main_app.config['MAIL_PORT'] = 465
     main_app.config['MAIL_USERNAME'] = 'mwadimemakokha@gmail.com'
