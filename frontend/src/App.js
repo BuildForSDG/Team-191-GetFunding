@@ -4,32 +4,26 @@ import {
   Switch,
   Route,
 } from "react-router-dom";
-import Header from "./components/layout/Header";
-import Landing from "./components/Landing";
-import Login from "./components/Auth/Login";
-import RegisterLender from "./components/Auth/Register/RegisterLender";
-import RegisterBorrower from "./components/Auth/Register/RegisterBorrower";
+import Header from "./components/layout/Header/index";
+import Landing from "./components/Landing/index";
+import Login from "./components/Auth/Login/Login";
+import Register from "./components/Auth/Register/Register";
 
 export default function App() {
   return (
     <Router>
       <>
         <Header />
-        <div className="container">
-          <Switch>
-            <Route exact path="/" component={Landing} />
-          </Switch>
-          <Switch>
-            <Route exact path="/borrower" component={RegisterBorrower} />
-          </Switch>
-          <Switch>
-            <Route exact path="/lender" component={RegisterLender} />
-          </Switch>
-          <Switch>
-            <Route exact path="/login" component={Login} />
-          </Switch>
-        </div>
+        <Switch>
+          <Route exact path="/" component={Landing} />
+        </Switch>
+        <Switch>
+          <Route path="/register" component={Register} />
+        </Switch>
+        <Switch>
+          <Route path="/login" component={Login} />
+        </Switch>
       </>
     </Router>
-  )
+  );
 }
