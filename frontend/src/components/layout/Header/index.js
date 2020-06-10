@@ -1,5 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom"
+import somaTechLogo from "../../../assets/somaTechLogo.png"
+import "./header.css"
+
 
 export default function Header() {
     return (
@@ -9,13 +12,11 @@ export default function Header() {
                     <span className="navbar-toggler-icon"></span>
                 </button>
                 <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
-                    <a className="navbar-brand">SomaTech</a>
-                    <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <Link to="/" className="navbar-brand"><img src={somaTechLogo} className="logo" alt="logo" /></Link>
+                    
+                    <ul className="navbar-nav ml-auto mt-2 mt-lg-0">
                         <li className="nav-item">
-                            <Link to="/lender" className="nav-link">Lender</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link to="/borrower" className="nav-link">Borrower</Link>
+                            <Link to="/register" className="nav-link">Register</Link>
                         </li>
                         <li className="nav-item">
                             <Link to="/login" className="nav-link">Login</Link>

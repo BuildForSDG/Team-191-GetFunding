@@ -1,0 +1,101 @@
+
+.fore {
+    background: linear-gradient(135deg, #06794f 0%, rgba(15, 162, 139, 0.8) 100%);
+    background-color: #1f2d41;
+    /* height: 100%; */
+    margin: 0;
+
+}
+
+.btn-cta{
+    font-size: 0.8rem;
+    padding: 0.8rem 1.5rem;
+    color: #fff;
+    background-color: #00ba94;
+    border-color: #00ba94;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+
+}
+
+.btn-cta:hover {
+    background-color: #009476 !important;
+    border-color: #00876b !important;
+    color: rgb(219, 216, 216);
+}
+
+.lift-sm:hover {
+    transform: translateY(-0.1666666667rem);
+    box-shadow: 0 0.25rem 1rem 0 rgba(31, 45, 65, 0.25);
+    background-color: #00ba94;
+    border-color: #00ba94;
+}
+
+.rounded-pill {
+    border-radius: 50rem !important;
+}
+
+.btn-link{
+    text-decoration: none;
+    font-size: 0.8rem;
+    padding: 0.8rem 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgb(219, 216, 216);
+    border: none;
+}
+
+.btn-link:hover{
+    text-decoration: none;
+    color: rgb(230, 255, 88);
+    border: none;
+}
+
+.bg-light {
+    background-color: #eff3f9;
+}
+
+.bg-light-grey {
+    background-color:#dfdfdf;
+}
+
+.bg-white {
+    background-color: #fff;
+}
+
+.bg-green {
+    background-color: #85e291;
+}
+
+.img-section {
+    height: 50%;
+    width: auto;
+}
+
+/*
+    SVG CSS styling
+*/
+
+.text-white {
+    color: #fff;
+}
+
+svg {
+    overflow: hidden;
+} 
+
+.curved-div-1 svg {
+    display: block;
+    height: 25%;
+    
+}
+
+.curved-div-2 svg {
+    display: block;
+    height: 50%;
+}
+
+
+
